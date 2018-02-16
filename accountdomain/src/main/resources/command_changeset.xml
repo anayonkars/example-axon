@@ -1,0 +1,82 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                   http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet author="anayonkar" id="1">
+        <createTable tableName="domain_event_entry">
+            <column name="aggregate_identifier" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sequence_number" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="event_identifier" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payload_revision" type="VARCHAR(255)"/>
+            <column name="payload_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time_stamp" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="meta_data" type="LONGBLOB"/>
+            <column name="payload" type="LONGBLOB">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="anayonkar" id="2">
+        <addPrimaryKey columnNames="aggregate_identifier, sequence_number, type" constraintName="PRIMARY" tableName="domain_event_entry"/>
+    </changeSet>
+
+    <changeSet author="anayonkar" id="3">
+        <addUniqueConstraint columnNames="event_identifier" constraintName="UK_event_identifier" tableName="domain_event_entry"/>
+    </changeSet>
+
+    <changeSet author="anayonkar" id="4">
+        <createTable tableName="snapshot_event_entry">
+            <column name="aggregate_identifier" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sequence_number" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="event_identifier" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payload_revision" type="VARCHAR(255)"/>
+            <column name="payload_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time_stamp" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="meta_data" type="LONGBLOB"/>
+            <column name="payload" type="LONGBLOB">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="anayonkar" id="5">
+        <addPrimaryKey columnNames="aggregate_identifier, sequence_number, type" constraintName="PRIMARY" tableName="snapshot_event_entry"/>
+    </changeSet>
+
+    <changeSet author="anayonkar" id="6">
+        <addUniqueConstraint columnNames="event_identifier" constraintName="UK_event_identifier" tableName="snapshot_event_entry"/>
+    </changeSet>
+
+</databaseChangeLog>
