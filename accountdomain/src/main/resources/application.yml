@@ -1,0 +1,6 @@
+server:
+  port: 8800
+logging.level:
+  root: INFO
+  org.springframework.web: INFO
+  org.hibernate: INFO
