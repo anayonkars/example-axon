@@ -79,4 +79,25 @@
         <addUniqueConstraint columnNames="event_identifier" constraintName="UK_event_identifier" tableName="snapshot_event_entry"/>
     </changeSet>
 
+    <changeSet author="anayonkar" id="7">
+        <createTable tableName="account_view">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="balance" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="anayonkar" id="8">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="account_view"/>
+    </changeSet>
+
 </databaseChangeLog>

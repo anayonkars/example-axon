@@ -10,6 +10,7 @@ import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.commandhandling.gateway.CommandGatewayFactoryBean;
 import org.axonframework.common.jdbc.ConnectionProvider;
 import org.axonframework.common.jdbc.SpringDataSourceConnectionProvider;
+import org.axonframework.common.jpa.ContainerManagedEntityManagerProvider;
 import org.axonframework.common.jpa.EntityManagerProvider;
 import org.axonframework.eventhandling.EventBus;
 import org.axonframework.eventhandling.SimpleEventBus;
@@ -43,37 +44,16 @@ import javax.sql.DataSource;
         AccountView.class
 })
 @EnableJpaRepositories(basePackages = {
-        "code.exampleaxon.accountdomain.command",
         "code.exampleaxon.accountdomain.query",
-        "org.axonframework.eventstore.jpa"
 })
-//@Import({CommandDataSourceConfiguration.class})
 public class AxonConfiguration {
 
-    @Qualifier("commandTransactionManager")
     @Autowired
-    private PlatformTransactionManager commandTransactionManager;
-
-    @Qualifier("commandDataSource")
-    @Autowired
-    private DataSource commandDataSource;
+    private PlatformTransactionManager transactionManager;
 
     @Bean
     public EntityManagerProvider entityManagerProvider() {
-        EntityManagerProvider entityManagerProvider = new EntityManagerProvider() {
-            private EntityManager entityManager;
-
-            @Override
-            public EntityManager getEntityManager() {
-                return entityManager;
-            }
-
-            @PersistenceContext(unitName = "commandPU")
-            public void setEntityManager(EntityManager entityManager) {
-                this.entityManager = entityManager;
-            }
-        };
-        return entityManagerProvider;
+        return new ContainerManagedEntityManagerProvider();
     }
 
     @Bean
@@ -82,19 +62,10 @@ public class AxonConfiguration {
     }
 
     @Bean
-    public ConnectionProvider connectionProvider() {
-        return new SpringDataSourceConnectionProvider(commandDataSource);
-    }
-
-    @Bean
-    public TransactionManager transactionManager() {
-        return new SpringTransactionManager(commandTransactionManager);
-    }
-
-    @Bean
-    public CommandBus commandBus(TransactionManager transactionManager) {
+    public CommandBus commandBus() {
         SimpleCommandBus simpleCommandBus = new SimpleCommandBus();
-        simpleCommandBus.setTransactionManager(transactionManager);
+        simpleCommandBus.setTransactionManager(new SpringTransactionManager
+                (transactionManager));
         return simpleCommandBus;
     }
 
@@ -120,7 +91,11 @@ public class AxonConfiguration {
     @Bean
     public EventSourcingRepository<Account> accountRepository(EventStore
                                                                           eventStore, EventBus eventBus) {
-        return new EventSourcingRepository<Account>(Account.class, eventStore);
+        EventSourcingRepository<Account> repository = new EventSourcingRepository<Account>(
+                                                            Account.class,
+                                                            eventStore);
+        repository.setEventBus(eventBus);
+        return repository;
     }
 
     @Bean

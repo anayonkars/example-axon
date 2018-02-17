@@ -1,5 +1,6 @@
 package code.exampleaxon.accountdomain.query.view;
 
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -10,6 +11,9 @@ public class AccountView {
     private String name;
     private int balance;
     private String status;
+
+    public AccountView() {
+    }
 
     public AccountView(String id, String name) {
         this.id = id;

@@ -2,6 +2,7 @@ package code.exampleaxon.accountdomain.command.domain;
 
 import code.exampleaxon.accountdomain.command.OpenAccountCommand;
 import code.exampleaxon.accountdomain.command.event.AccountOpenedEvent;
+import code.exampleaxon.accountdomain.web.vo.AccountStatus;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.axonframework.eventsourcing.annotation.EventSourcingHandler;
@@ -28,37 +29,23 @@ public class Account extends AbstractAnnotatedAggregateRoot<String> {
     public void on(AccountOpenedEvent event) {
         this.id = event.getId();
         this.name = event.getName();
+        this.balance = 0;
+        this.status = AccountStatus.ACCOUNT_STATUS_OPEN;
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getBalance() {
         return balance;
     }
 
-    public void setBalance(int balance) {
-        this.balance = balance;
-    }
-
     public String getStatus() {
         return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 }
