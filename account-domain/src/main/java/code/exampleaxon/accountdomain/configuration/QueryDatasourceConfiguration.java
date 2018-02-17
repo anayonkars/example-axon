@@ -1,6 +1,11 @@
 package code.exampleaxon.accountdomain.configuration;
 
+import code.exampleaxon.accountdomain.command.domain.Account;
+import code.exampleaxon.accountdomain.query.view.AccountView;
+import org.axonframework.eventstore.jpa.DomainEventEntry;
+import org.axonframework.eventstore.jpa.SnapshotEventEntry;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
@@ -19,9 +24,16 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @EnableJpaRepositories(
         entityManagerFactoryRef = "queryEntityManagerFactory",
-        basePackages = {"code.exampleaxon.accountdomain.query"}
+        basePackages = {"code.exampleaxon.accountdomain.query",
+                        "org.axonframework.eventstore.jpa"}
         //basePackageClasses = {AccountViewRepository.class, AccountView.class}
 )
+@EntityScan(basePackageClasses = {
+        DomainEventEntry.class,
+        SnapshotEventEntry.class,
+        Account.class,
+        AccountView.class
+})
 public class QueryDatasourceConfiguration {
     @Bean(name = "queryDataSource")
     @ConfigurationProperties(prefix = "query.datasource")
@@ -32,11 +44,16 @@ public class QueryDatasourceConfiguration {
     @Bean(name = "queryEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean queryEntityManagerFactory(EntityManagerFactoryBuilder builder,
                                                                               @Qualifier("queryDataSource") DataSource queryDataSource) {
-        return builder
+        LocalContainerEntityManagerFactoryBean
+        localContainerEntityManagerFactoryBean =  builder
                 .dataSource(queryDataSource)
                 .packages("code.exampleaxon.accountdomain.query")
                 .persistenceUnit("queryPU")
-                .build();
+               .build();
+        localContainerEntityManagerFactoryBean.setPackagesToScan("code" +
+                        ".exampleaxon.accountdomain.query",
+                "org.axonframework.eventstore.jpa");
+        return localContainerEntityManagerFactoryBean;
     }
 
     @Bean(name = "queryTransactionManager")

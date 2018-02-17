@@ -1,8 +1,12 @@
 package code.exampleaxon.accountdomain.configuration;
 
+import code.exampleaxon.accountdomain.command.domain.Account;
 import code.exampleaxon.accountdomain.query.repository.AccountViewRepository;
 import code.exampleaxon.accountdomain.query.view.AccountView;
+import org.axonframework.eventstore.jpa.DomainEventEntry;
+import org.axonframework.eventstore.jpa.SnapshotEventEntry;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
@@ -22,9 +26,16 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @EnableJpaRepositories(
         entityManagerFactoryRef = "commandEntityManagerFactory",
-        basePackages = {"code.exampleaxon.accountdomain.command"}
+        basePackages = {"code.exampleaxon.accountdomain.command",
+                        "org.axonframework.eventstore.jpa"}
         //basePackageClasses = {AccountViewRepository.class, AccountView.class}
 )
+@EntityScan(basePackageClasses = {
+        DomainEventEntry.class,
+        SnapshotEventEntry.class,
+        Account.class,
+        AccountView.class
+})
 public class CommandDataSourceConfiguration {
     @Primary
     @Bean(name = "commandDataSource")
@@ -37,11 +48,15 @@ public class CommandDataSourceConfiguration {
     @Bean(name = "commandEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean commandEntityManagerFactory(EntityManagerFactoryBuilder builder,
                                                                               @Qualifier("commandDataSource") DataSource commandDataSource) {
-        return builder
+        LocalContainerEntityManagerFactoryBean
+        localContainerEntityManagerFactoryBean =  builder
                 .dataSource(commandDataSource)
                 .packages("code.exampleaxon.accountdomain.command")
                 .persistenceUnit("commandPU")
                 .build();
+        localContainerEntityManagerFactoryBean.setPackagesToScan("code.exampleaxon.accountdomain.command",
+                "org.axonframework.eventstore.jpa");
+        return localContainerEntityManagerFactoryBean;
     }
 
     @Primary

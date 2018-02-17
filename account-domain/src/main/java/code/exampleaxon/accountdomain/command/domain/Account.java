@@ -1,16 +1,14 @@
 package code.exampleaxon.accountdomain.command.domain;
 
+import code.exampleaxon.accountdomain.command.OpenAccountCommand;
 import code.exampleaxon.accountdomain.command.event.AccountOpenedEvent;
-import org.axonframework.commandhandling.model.AggregateIdentifier;
-import org.axonframework.commandhandling.model.AggregateLifecycle;
-import org.axonframework.commandhandling.model.AggregateRoot;
-import org.axonframework.eventsourcing.EventSourcingHandler;
+import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
+import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
+import org.axonframework.eventsourcing.annotation.EventSourcingHandler;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@AggregateRoot
-public class Account {
+public class Account extends AbstractAnnotatedAggregateRoot<String> {
     @AggregateIdentifier
     @Id
     private String id;
@@ -18,9 +16,12 @@ public class Account {
     private int balance;
     private String status;
 
+    public Account() {
+    }
 
-    public Account(String id, String name) {
-        AggregateLifecycle.apply(new AccountOpenedEvent(id, name));
+    public Account(OpenAccountCommand openAccountCommand) {
+        apply(new AccountOpenedEvent(openAccountCommand.getId(),
+                openAccountCommand.getName()));
     }
 
     @EventSourcingHandler

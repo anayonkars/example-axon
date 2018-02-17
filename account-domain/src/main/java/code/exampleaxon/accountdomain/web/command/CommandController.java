@@ -2,7 +2,7 @@ package code.exampleaxon.accountdomain.web.command;
 
 import code.exampleaxon.accountdomain.command.OpenAccountCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.axonframework.common.IdentifierFactory;
+import org.axonframework.domain.IdentifierFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
