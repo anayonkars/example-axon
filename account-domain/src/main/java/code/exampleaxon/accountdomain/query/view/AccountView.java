@@ -11,7 +11,9 @@ public class AccountView {
     private int balance;
     private String status;
 
-    public AccountView() {
+    public AccountView(String id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public String getId() {

@@ -1,4 +1,4 @@
-package code.exampleaxon.accountdomain.controller;
+package code.exampleaxon.accountdomain.web.controller;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

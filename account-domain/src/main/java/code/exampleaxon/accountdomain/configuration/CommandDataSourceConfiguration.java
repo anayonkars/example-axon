@@ -40,7 +40,7 @@ public class CommandDataSourceConfiguration {
         return builder
                 .dataSource(commandDataSource)
                 .packages("code.exampleaxon.accountdomain.command")
-                .persistenceUnit("command")
+                .persistenceUnit("commandPU")
                 .build();
     }
 

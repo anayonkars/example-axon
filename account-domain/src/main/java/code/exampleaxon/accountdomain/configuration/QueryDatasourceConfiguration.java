@@ -35,7 +35,7 @@ public class QueryDatasourceConfiguration {
         return builder
                 .dataSource(queryDataSource)
                 .packages("code.exampleaxon.accountdomain.query")
-                .persistenceUnit("query")
+                .persistenceUnit("queryPU")
                 .build();
     }
 
