@@ -160,6 +160,29 @@
 				"description": ""
 			},
 			"response": []
+		},
+		{
+			"name": "AccountGet",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8800/account/get/e76e6389-c8d9-4933-bcf7-8313a38d4f04",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8800",
+					"path": [
+						"account",
+						"get",
+						"e76e6389-c8d9-4933-bcf7-8313a38d4f04"
+					]
+				},
+				"description": ""
+			},
+			"response": []
 		}
 	]
 }

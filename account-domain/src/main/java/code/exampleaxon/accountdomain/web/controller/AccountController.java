@@ -1,28 +1,30 @@
-package code.exampleaxon.accountdomain.web.command;
+package code.exampleaxon.accountdomain.web.controller;
 
 import code.exampleaxon.accountdomain.command.*;
+import code.exampleaxon.accountdomain.query.repository.AccountViewRepository;
+import code.exampleaxon.accountdomain.query.view.AccountView;
 import code.exampleaxon.accountdomain.web.request.*;
 import code.exampleaxon.accountdomain.web.response.OpenAccountResponse;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.domain.IdentifierFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.core.MediaType;
 
 @RestController
 @RequestMapping("/account")
-public class CommandController {
+public class AccountController {
     private final IdentifierFactory identifierFactory = IdentifierFactory.getInstance();
 
     private final CommandGateway commandGateway;
+    private final AccountViewRepository repository;
 
     @Autowired
-    public CommandController(CommandGateway commandGateway) {
+    public AccountController(CommandGateway commandGateway,
+                             AccountViewRepository repository) {
         this.commandGateway = commandGateway;
+        this.repository = repository;
     }
 
     @RequestMapping(value = "open",
@@ -78,5 +80,12 @@ public class CommandController {
                                      request) {
         commandGateway.sendAndWait(new DebitAmountCommand(request.getId(),
                 request.getAmount()));
+    }
+
+    @RequestMapping(value = "get/{id}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON})
+    public AccountView getAccount(@PathVariable String id) {
+        return repository.findOne(id);
     }
 }
