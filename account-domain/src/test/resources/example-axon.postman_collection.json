@@ -1,0 +1,165 @@
+{
+	"info": {
+		"name": "example-axon",
+		"_postman_id": "47a38c15-5fe2-0547-07cf-d0cdf694e100",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "AccountOpen",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"aabbccddee\"}"
+				},
+				"url": {
+					"raw": "http://localhost:8800/account/open/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8800",
+					"path": [
+						"account",
+						"open",
+						""
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "AccountActivate",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"8c0895a9-144f-47d0-9c8b-8e8fe2360bca\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8800/account/activate/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8800",
+					"path": [
+						"account",
+						"activate",
+						""
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "AccountClose",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"8c0895a9-144f-47d0-9c8b-8e8fe2360bca\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8800/account/close/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8800",
+					"path": [
+						"account",
+						"close",
+						""
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "AmountCredit",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"8c0895a9-144f-47d0-9c8b-8e8fe2360bca\",\n    \"amount\": 100\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8800/account/credit/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8800",
+					"path": [
+						"account",
+						"credit",
+						""
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "AmountDebit",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"8c0895a9-144f-47d0-9c8b-8e8fe2360bca\",\n    \"amount\": 100\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8800/account/debit/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8800",
+					"path": [
+						"account",
+						"debit",
+						""
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
