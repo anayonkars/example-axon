@@ -35,7 +35,7 @@ public class ActivateAccountCommandHandlerTest {
     }
 
     @Test
-    public void expectErrorWhenReactivatingAccount() {
+    public void expectExceptionWhenReactivatingAccount() {
         fixtureConfiguration.given(new AccountOpenedEvent("test-id",
                 "test-name"), new AccountActivatedEvent("test-id"))
                             .when(new ActivateAccountCommand("test-id"))

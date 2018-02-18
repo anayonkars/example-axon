@@ -1,9 +1,7 @@
 package code.exampleaxon.accountdomain.web.command;
 
-import code.exampleaxon.accountdomain.command.ActivateAccountCommand;
-import code.exampleaxon.accountdomain.command.OpenAccountCommand;
-import code.exampleaxon.accountdomain.web.request.ActivateAccountRequest;
-import code.exampleaxon.accountdomain.web.request.OpenAccountRequest;
+import code.exampleaxon.accountdomain.command.*;
+import code.exampleaxon.accountdomain.web.request.*;
 import code.exampleaxon.accountdomain.web.response.OpenAccountResponse;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.domain.IdentifierFactory;
@@ -48,5 +46,37 @@ public class CommandController {
                                                    ActivateAccountRequest
                                                                request) {
         commandGateway.sendAndWait(new ActivateAccountCommand(request.getId()));
+    }
+
+    @RequestMapping(value = "close",
+            method = RequestMethod.POST,
+            consumes = {MediaType.APPLICATION_JSON},
+            produces = {MediaType.APPLICATION_JSON})
+    public void closeAccount(@RequestBody
+                                     CloseAccountRequest
+                                        request) {
+        commandGateway.sendAndWait(new CloseAccountCommand(request.getId()));
+    }
+
+    @RequestMapping(value = "credit",
+            method = RequestMethod.POST,
+            consumes = {MediaType.APPLICATION_JSON},
+            produces = {MediaType.APPLICATION_JSON})
+    public void creditAmount(@RequestBody
+                                     CreditAmountRequest
+                                     request) {
+        commandGateway.sendAndWait(new CreditAmountCommand(request.getId(),
+                request.getAmount()));
+    }
+
+    @RequestMapping(value = "debit",
+            method = RequestMethod.POST,
+            consumes = {MediaType.APPLICATION_JSON},
+            produces = {MediaType.APPLICATION_JSON})
+    public void debitAmount(@RequestBody
+                                    DebitAmountRequest
+                                     request) {
+        commandGateway.sendAndWait(new DebitAmountCommand(request.getId(),
+                request.getAmount()));
     }
 }

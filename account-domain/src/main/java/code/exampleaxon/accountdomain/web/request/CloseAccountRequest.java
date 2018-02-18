@@ -1,6 +1,6 @@
 package code.exampleaxon.accountdomain.web.request;
 
-public class ActivateAccountRequest {
+public class CloseAccountRequest {
     private String id;
 
     public String getId() {

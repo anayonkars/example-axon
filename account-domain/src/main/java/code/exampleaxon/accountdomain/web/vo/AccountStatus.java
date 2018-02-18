@@ -13,7 +13,7 @@ public class AccountStatus {
             (Arrays.asList(ACCOUNT_STATUS_OPEN, ACCOUNT_STATUS_ACTIVE,
                     ACCOUNT_STATUS_CLOSE));
 
-    private static boolean isValidChange(String currentStatus, String
+    private static boolean isValidChange(String id, String currentStatus, String
             nextStatus) {
         int currentIndex = -1;
         int nextIndex = -1;
@@ -26,10 +26,11 @@ public class AccountStatus {
                 && currentIndex < nextIndex;
     }
 
-    public static void validateAccountStateChange(String currentStatus,
+    public static void validateAccountStateChange(String id, String
+            currentStatus,
                                                      String nextStatus) {
-        if(!isValidChange(currentStatus, nextStatus)) {
-            throw new AccountStateChangeNotValidException(currentStatus,
+        if(!isValidChange(id, currentStatus, nextStatus)) {
+            throw new AccountStateChangeNotValidException(id, currentStatus,
                     nextStatus);
         }
     }
