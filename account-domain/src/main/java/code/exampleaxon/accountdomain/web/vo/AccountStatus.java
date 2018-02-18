@@ -1,5 +1,7 @@
 package code.exampleaxon.accountdomain.web.vo;
 
+import code.exampleaxon.accountdomain.exception.AccountStateChangeNotValidException;
+
 import java.util.*;
 
 public class AccountStatus {
@@ -11,7 +13,7 @@ public class AccountStatus {
             (Arrays.asList(ACCOUNT_STATUS_OPEN, ACCOUNT_STATUS_ACTIVE,
                     ACCOUNT_STATUS_CLOSE));
 
-    public static boolean isValidChange(String currentStatus, String
+    private static boolean isValidChange(String currentStatus, String
             nextStatus) {
         int currentIndex = -1;
         int nextIndex = -1;
@@ -22,5 +24,13 @@ public class AccountStatus {
         return currentIndex != -1
                 && nextIndex != -1
                 && currentIndex < nextIndex;
+    }
+
+    public static void validateAccountStateChange(String currentStatus,
+                                                     String nextStatus) {
+        if(!isValidChange(currentStatus, nextStatus)) {
+            throw new AccountStateChangeNotValidException(currentStatus,
+                    nextStatus);
+        }
     }
 }

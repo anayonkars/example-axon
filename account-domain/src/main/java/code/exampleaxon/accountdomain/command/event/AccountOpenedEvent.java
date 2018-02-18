@@ -4,6 +4,9 @@ public class AccountOpenedEvent {
     private String id;
     private String name;
 
+    public AccountOpenedEvent() {
+    }
+
     public AccountOpenedEvent(String id, String name) {
         this.id = id;
         this.name = name;

@@ -1,7 +1,10 @@
 package code.exampleaxon.accountdomain.web.command;
 
+import code.exampleaxon.accountdomain.command.ActivateAccountCommand;
 import code.exampleaxon.accountdomain.command.OpenAccountCommand;
+import code.exampleaxon.accountdomain.web.request.ActivateAccountRequest;
 import code.exampleaxon.accountdomain.web.request.OpenAccountRequest;
+import code.exampleaxon.accountdomain.web.response.OpenAccountResponse;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.domain.IdentifierFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +27,26 @@ public class CommandController {
         this.commandGateway = commandGateway;
     }
 
-    @RequestMapping(value = "open", method = RequestMethod.POST, consumes =
-            {MediaType.APPLICATION_JSON})
-    public String test(@RequestBody OpenAccountRequest request) {
+    @RequestMapping(value = "open",
+                    method = RequestMethod.POST,
+                    consumes = {MediaType.APPLICATION_JSON},
+                    produces = {MediaType.APPLICATION_JSON})
+    public OpenAccountResponse openAccount(@RequestBody OpenAccountRequest
+                                                   request) {
         String id = identifierFactory.generateIdentifier();
         commandGateway.sendAndWait(new OpenAccountCommand(id, request
                .getName()));
-        return id;
+        OpenAccountResponse response = new OpenAccountResponse(id);
+        return response;
+    }
+
+    @RequestMapping(value = "activate",
+            method = RequestMethod.POST,
+            consumes = {MediaType.APPLICATION_JSON},
+            produces = {MediaType.APPLICATION_JSON})
+    public void activateAccount(@RequestBody
+                                                   ActivateAccountRequest
+                                                               request) {
+        commandGateway.sendAndWait(new ActivateAccountCommand(request.getId()));
     }
 }

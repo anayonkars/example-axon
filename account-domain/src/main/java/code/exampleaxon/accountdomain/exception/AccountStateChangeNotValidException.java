@@ -1,10 +1,10 @@
 package code.exampleaxon.accountdomain.exception;
 
-public class InvalidLifecycleChangeException extends RuntimeException {
+public class AccountStateChangeNotValidException extends RuntimeException {
     private String currentStatus;
     private String nextStatus;
 
-    public InvalidLifecycleChangeException(String currentStatus, String nextStatus) {
+    public AccountStateChangeNotValidException(String currentStatus, String nextStatus) {
         this.currentStatus = currentStatus;
         this.nextStatus = nextStatus;
     }
