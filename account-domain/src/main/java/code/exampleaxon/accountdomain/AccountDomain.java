@@ -1,11 +1,12 @@
 package code.exampleaxon.accountdomain;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import static org.springframework.boot.SpringApplication.run;
 
 @SpringBootApplication
 public class AccountDomain {
     public static void main(String[] args) {
-        SpringApplication.run(AccountDomain.class, args);
+        run(AccountDomain.class, args);
     }
 }

@@ -7,7 +7,7 @@ import org.axonframework.eventsourcing.EventSourcingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import static java.util.Optional.of;
 
 @Component
 public class CloseAccountCommandHandler {
@@ -20,7 +20,7 @@ public class CloseAccountCommandHandler {
 
     @CommandHandler
     public void handle(CloseAccountCommand command) {
-        Optional.of(repository.load(command.getId()))
+        of(repository.load(command.getId()))
                 .ifPresent(account -> account.close());
     }
 }

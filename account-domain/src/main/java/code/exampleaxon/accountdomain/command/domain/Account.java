@@ -1,6 +1,5 @@
 package code.exampleaxon.accountdomain.command.domain;
 
-import code.exampleaxon.accountdomain.command.OpenAccountCommand;
 import code.exampleaxon.accountdomain.command.event.*;
 import code.exampleaxon.accountdomain.exception.AccountClosureNotValidException;
 import code.exampleaxon.accountdomain.exception.AccountOperationNotPossibleException;
@@ -12,6 +11,8 @@ import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.axonframework.eventsourcing.annotation.EventSourcingHandler;
 
 import javax.persistence.Id;
+
+import static code.exampleaxon.accountdomain.web.vo.AccountStatus.*;
 
 public class Account extends AbstractAnnotatedAggregateRoot<String> {
     @AggregateIdentifier
@@ -29,14 +30,12 @@ public class Account extends AbstractAnnotatedAggregateRoot<String> {
     }
 
     public void activate() {
-        AccountStatus.validateAccountStateChange(this.id, this.status,
-                AccountStatus.ACCOUNT_STATUS_ACTIVE);
+        validateAccountStateChange(this.id, this.status, ACCOUNT_STATUS_ACTIVE);
         apply(new AccountActivatedEvent(this.id));
     }
 
     public void close() {
-        AccountStatus.validateAccountStateChange(this.id, this.status,
-                AccountStatus.ACCOUNT_STATUS_CLOSE);
+        validateAccountStateChange(this.id, this.status, ACCOUNT_STATUS_CLOSE);
         validateEligibilityForClosure();
         apply(new AccountClosedEvent(this.id));
     }
@@ -61,12 +60,12 @@ public class Account extends AbstractAnnotatedAggregateRoot<String> {
 
     @EventSourcingHandler
     public void on(AccountActivatedEvent event) {
-        this.status = AccountStatus.ACCOUNT_STATUS_ACTIVE;
+        this.status = ACCOUNT_STATUS_ACTIVE;
     }
 
     @EventSourcingHandler
     public void on(AccountClosedEvent event) {
-        this.status = AccountStatus.ACCOUNT_STATUS_CLOSE;
+        this.status = ACCOUNT_STATUS_CLOSE;
         //markDeleted();
     }
 
@@ -87,7 +86,7 @@ public class Account extends AbstractAnnotatedAggregateRoot<String> {
     }
 
     private void validateEligibilityForOperation() {
-        if(status != AccountStatus.ACCOUNT_STATUS_ACTIVE) {
+        if(status != ACCOUNT_STATUS_ACTIVE) {
             throw new AccountOperationNotPossibleException(id, status);
         }
     }

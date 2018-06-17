@@ -8,8 +8,6 @@ import org.axonframework.commandhandling.annotation.AggregateAnnotationCommandHa
 import org.axonframework.commandhandling.annotation.AnnotationCommandHandlerBeanPostProcessor;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.commandhandling.gateway.CommandGatewayFactoryBean;
-import org.axonframework.common.jdbc.ConnectionProvider;
-import org.axonframework.common.jdbc.SpringDataSourceConnectionProvider;
 import org.axonframework.common.jpa.ContainerManagedEntityManagerProvider;
 import org.axonframework.common.jpa.EntityManagerProvider;
 import org.axonframework.eventhandling.EventBus;
@@ -23,18 +21,14 @@ import org.axonframework.eventstore.jpa.SnapshotEventEntry;
 import org.axonframework.serializer.Serializer;
 import org.axonframework.serializer.json.JacksonSerializer;
 import org.axonframework.unitofwork.SpringTransactionManager;
-import org.axonframework.unitofwork.TransactionManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.sql.DataSource;
+import static org.axonframework.commandhandling.annotation.AggregateAnnotationCommandHandler.subscribe;
 
 @Configuration
 @EntityScan(basePackageClasses = {
@@ -103,7 +97,7 @@ public class AxonConfiguration {
             (EventSourcingRepository<Account>
                                                      accountRepository,
                                        CommandBus commandBus) {
-        return  AggregateAnnotationCommandHandler.subscribe(Account.class,
+        return  subscribe(Account.class,
                 accountRepository, commandBus);
     }
 
