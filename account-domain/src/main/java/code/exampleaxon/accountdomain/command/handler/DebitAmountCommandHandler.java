@@ -20,7 +20,7 @@ public class DebitAmountCommandHandler {
 
     @CommandHandler
     public void handle(DebitAmountCommand command) {
-        of(repository.load(command.getId())).ifPresent(account ->
-                account.debit(command.getAmount()));
+        of(repository.load(command.getId()))
+                .ifPresent(account -> account.debit(command.getAmount()));
     }
 }
