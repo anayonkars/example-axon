@@ -64,16 +64,14 @@ public class AxonConfiguration {
     }
 
     @Bean
-    public CommandGatewayFactoryBean<CommandGateway> commandGateway
-            (CommandBus commandBus) {
+    public CommandGatewayFactoryBean<CommandGateway> commandGateway(CommandBus commandBus) {
         CommandGatewayFactoryBean<CommandGateway> factory = new CommandGatewayFactoryBean<CommandGateway>();
         factory.setCommandBus(commandBus);
         return factory;
     }
 
     @Bean
-    public EventStore eventStore(EntityManagerProvider entityManagerProvider,
-                                    Serializer serializer) {
+    public EventStore eventStore(EntityManagerProvider entityManagerProvider, Serializer serializer) {
         return new JpaEventStore(entityManagerProvider, serializer);
     }
 
@@ -83,22 +81,16 @@ public class AxonConfiguration {
     }
 
     @Bean
-    public EventSourcingRepository<Account> accountRepository(EventStore
-                                                                          eventStore, EventBus eventBus) {
-        EventSourcingRepository<Account> repository = new EventSourcingRepository<Account>(
-                                                            Account.class,
-                                                            eventStore);
+    public EventSourcingRepository<Account> accountRepository(EventStore eventStore, EventBus eventBus) {
+        EventSourcingRepository<Account> repository = new EventSourcingRepository<Account>(Account.class, eventStore);
         repository.setEventBus(eventBus);
         return repository;
     }
 
     @Bean
     public AggregateAnnotationCommandHandler commandHandler
-            (EventSourcingRepository<Account>
-                                                     accountRepository,
-                                       CommandBus commandBus) {
-        return  subscribe(Account.class,
-                accountRepository, commandBus);
+            (EventSourcingRepository<Account> accountRepository, CommandBus commandBus) {
+        return  subscribe(Account.class, accountRepository, commandBus);
     }
 
     @Bean

@@ -11,12 +11,12 @@ public class AccountStatus {
     public static final String ACCOUNT_STATUS_ACTIVE = "ACTIVE";
     public static final String ACCOUNT_STATUS_CLOSE = "CLOSE";
 
-    private static final List<String> accountLifeCycle = new ArrayList<>
-            (Arrays.asList(ACCOUNT_STATUS_OPEN, ACCOUNT_STATUS_ACTIVE,
-                    ACCOUNT_STATUS_CLOSE));
+    private static final List<String> accountLifeCycle = new ArrayList<>(Arrays.asList(
+                                                                            ACCOUNT_STATUS_OPEN,
+                                                                            ACCOUNT_STATUS_ACTIVE,
+                                                                            ACCOUNT_STATUS_CLOSE));
 
-    private static boolean isValidChange(String id, String currentStatus, String
-            nextStatus) {
+    private static boolean isValidChange(String id, String currentStatus, String nextStatus) {
         int currentIndex = -1;
         int nextIndex = -1;
         if(currentStatus != null && nextStatus != null) {
@@ -28,9 +28,7 @@ public class AccountStatus {
                 && currentIndex < nextIndex;
     }
 
-    public static void validateAccountStateChange(String id, String
-            currentStatus,
-                                                     String nextStatus) {
+    public static void validateAccountStateChange(String id, String currentStatus, String nextStatus) {
         if(!isValidChange(id, currentStatus, nextStatus)) {
             throw new AccountStateChangeNotValidException(id, currentStatus,
                     nextStatus);

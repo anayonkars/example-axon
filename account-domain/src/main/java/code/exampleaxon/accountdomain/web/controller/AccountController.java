@@ -31,8 +31,7 @@ public class AccountController {
             produces = {APPLICATION_JSON})
     public OpenAccountResponse openAccount(@RequestBody OpenAccountRequest request) {
         String id = identifierFactory.generateIdentifier();
-        commandGateway.sendAndWait(new OpenAccountCommand(id, request
-                .getName()));
+        commandGateway.sendAndWait(new OpenAccountCommand(id, request.getName()));
         OpenAccountResponse response = new OpenAccountResponse(id);
         return response;
     }
@@ -55,16 +54,14 @@ public class AccountController {
             consumes = {APPLICATION_JSON},
             produces = {APPLICATION_JSON})
     public void creditAmount(@RequestBody CreditAmountRequest request) {
-        commandGateway.sendAndWait(new CreditAmountCommand(request.getId(),
-                request.getAmount()));
+        commandGateway.sendAndWait(new CreditAmountCommand(request.getId(), request.getAmount()));
     }
 
     @PostMapping(value = "debit",
             consumes = {APPLICATION_JSON},
             produces = {APPLICATION_JSON})
     public void debitAmount(@RequestBody DebitAmountRequest request) {
-        commandGateway.sendAndWait(new DebitAmountCommand(request.getId(),
-                request.getAmount()));
+        commandGateway.sendAndWait(new DebitAmountCommand(request.getId(), request.getAmount()));
     }
 
     @GetMapping(value = "get/{id}",
