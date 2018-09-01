@@ -8,9 +8,10 @@ logging.level:
   org.hibernate: INFO
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/exampleaxon
-    username: anayonkar
-    password: anayonkar
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
   jpa:
     properties:
       hibernate:
@@ -20,3 +21,11 @@ spring:
       show_sql: true
       use_sql_comments: true
       format_sql: true
+      ddl-auto: none
+  h2:
+    console:
+      enabled: true
+
+liquibase:
+  change-log:
+    classpath:account_changeset.xml

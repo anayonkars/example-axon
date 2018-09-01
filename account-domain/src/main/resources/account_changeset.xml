@@ -36,7 +36,7 @@
     </changeSet>
 
     <changeSet author="anayonkar" id="2">
-        <addPrimaryKey columnNames="aggregate_identifier, sequence_number, type" constraintName="PRIMARY" tableName="domain_event_entry"/>
+        <addPrimaryKey columnNames="aggregate_identifier, sequence_number, type" constraintName="PK_aggregate_id" tableName="domain_event_entry"/>
     </changeSet>
 
     <changeSet author="anayonkar" id="3">
@@ -72,11 +72,11 @@
     </changeSet>
 
     <changeSet author="anayonkar" id="5">
-        <addPrimaryKey columnNames="aggregate_identifier, sequence_number, type" constraintName="PRIMARY" tableName="snapshot_event_entry"/>
+        <addPrimaryKey columnNames="aggregate_identifier, sequence_number, type" constraintName="PK_aggregate_id_snapshot" tableName="snapshot_event_entry"/>
     </changeSet>
 
     <changeSet author="anayonkar" id="6">
-        <addUniqueConstraint columnNames="event_identifier" constraintName="UK_event_identifier" tableName="snapshot_event_entry"/>
+        <addUniqueConstraint columnNames="event_identifier" constraintName="UK_event_identifier_snapshot" tableName="snapshot_event_entry"/>
     </changeSet>
 
     <changeSet author="anayonkar" id="7">
@@ -97,7 +97,7 @@
     </changeSet>
 
     <changeSet author="anayonkar" id="8">
-        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="account_view"/>
+        <addPrimaryKey columnNames="id" constraintName="PK_account_id" tableName="account_view"/>
     </changeSet>
 
 </databaseChangeLog>
