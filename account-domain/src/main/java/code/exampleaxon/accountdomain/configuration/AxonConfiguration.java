@@ -58,8 +58,7 @@ public class AxonConfiguration {
     @Bean
     public CommandBus commandBus() {
         SimpleCommandBus simpleCommandBus = new SimpleCommandBus();
-        simpleCommandBus.setTransactionManager(new SpringTransactionManager
-                (transactionManager));
+        simpleCommandBus.setTransactionManager(new SpringTransactionManager(transactionManager));
         return simpleCommandBus;
     }
 
@@ -88,22 +87,20 @@ public class AxonConfiguration {
     }
 
     @Bean
-    public AggregateAnnotationCommandHandler commandHandler
-            (EventSourcingRepository<Account> accountRepository, CommandBus commandBus) {
+    public AggregateAnnotationCommandHandler commandHandler(EventSourcingRepository<Account> accountRepository,
+                                                            CommandBus commandBus) {
         return  subscribe(Account.class, accountRepository, commandBus);
     }
 
     @Bean
-    public AnnotationEventListenerBeanPostProcessor
-    annotationEventListenerBeanPostProcessor(EventBus eventBus) {
+    public AnnotationEventListenerBeanPostProcessor annotationEventListenerBeanPostProcessor(EventBus eventBus) {
         AnnotationEventListenerBeanPostProcessor processor = new AnnotationEventListenerBeanPostProcessor();
         processor.setEventBus(eventBus);
         return processor;
     }
 
     @Bean
-    public AnnotationCommandHandlerBeanPostProcessor
-    annotationCommandHandlerBeanPostProcessor(CommandBus commandBus) {
+    public AnnotationCommandHandlerBeanPostProcessor annotationCommandHandlerBeanPostProcessor(CommandBus commandBus) {
         AnnotationCommandHandlerBeanPostProcessor processor = new AnnotationCommandHandlerBeanPostProcessor();
         processor.setCommandBus(commandBus);
         return processor;
