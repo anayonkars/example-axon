@@ -16,20 +16,14 @@ public class AccountStatus {
                                                                             ACCOUNT_STATUS_ACTIVE,
                                                                             ACCOUNT_STATUS_CLOSE));
 
-    private static boolean isValidChange(String id, String currentStatus, String nextStatus) {
-        int currentIndex = -1;
-        int nextIndex = -1;
-        if(currentStatus != null && nextStatus != null) {
-            currentIndex = accountLifeCycle.indexOf(currentStatus);
-            nextIndex = accountLifeCycle.indexOf(nextStatus);
-        }
-        return currentIndex != -1
-                && nextIndex != -1
-                && currentIndex < nextIndex;
+    private static boolean isValidChange(String currentStatus, String nextStatus) {
+        return currentStatus != null
+                && nextStatus != null
+                && accountLifeCycle.indexOf(currentStatus) < accountLifeCycle.indexOf(nextStatus);
     }
 
     public static void validateAccountStateChange(String id, String currentStatus, String nextStatus) {
-        if(!isValidChange(id, currentStatus, nextStatus)) {
+        if(!isValidChange(currentStatus, nextStatus)) {
             throw new AccountStateChangeNotValidException(id, currentStatus,
                     nextStatus);
         }

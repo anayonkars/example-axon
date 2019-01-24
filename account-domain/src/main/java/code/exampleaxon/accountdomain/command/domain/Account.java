@@ -66,7 +66,6 @@ public class Account extends AbstractAnnotatedAggregateRoot<String> {
     @EventSourcingHandler
     public void on(AccountClosedEvent event) {
         this.status = ACCOUNT_STATUS_CLOSE;
-        //markDeleted();
     }
 
     @EventSourcingHandler
@@ -86,7 +85,7 @@ public class Account extends AbstractAnnotatedAggregateRoot<String> {
     }
 
     private void validateEligibilityForOperation() {
-        if(status != ACCOUNT_STATUS_ACTIVE) {
+        if(!ACCOUNT_STATUS_ACTIVE.equals(status)) {
             throw new AccountOperationNotPossibleException(id, status);
         }
     }
