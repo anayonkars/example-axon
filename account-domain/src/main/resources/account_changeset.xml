@@ -7,7 +7,14 @@
                    http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
-    <changeSet author="anayonkar" id="1">
+    <changeSet id="1" author="anayonkar">
+        <createSequence sequenceName="hibernate_sequence"
+                        cycle="true"
+                        incrementBy="1"
+                        ordered="true"
+                        startValue="1"/>
+    </changeSet>
+    <changeSet author="anayonkar" id="2">
         <createTable tableName="domain_event_entry">
             <column name="aggregate_identifier" type="VARCHAR(255)">
                 <constraints nullable="false"/>
@@ -32,18 +39,19 @@
             <column name="payload" type="LONGBLOB">
                 <constraints nullable="false"/>
             </column>
+            <column name="global_index" valueComputed="hibernate_sequence.nextval" type="BIGINT"/>
         </createTable>
     </changeSet>
 
-    <changeSet author="anayonkar" id="2">
+    <changeSet author="anayonkar" id="3">
         <addPrimaryKey columnNames="aggregate_identifier, sequence_number, type" constraintName="PK_aggregate_id" tableName="domain_event_entry"/>
     </changeSet>
 
-    <changeSet author="anayonkar" id="3">
+    <changeSet author="anayonkar" id="4">
         <addUniqueConstraint columnNames="event_identifier" constraintName="UK_event_identifier" tableName="domain_event_entry"/>
     </changeSet>
 
-    <changeSet author="anayonkar" id="4">
+    <changeSet author="anayonkar" id="5">
         <createTable tableName="snapshot_event_entry">
             <column name="aggregate_identifier" type="VARCHAR(255)">
                 <constraints nullable="false"/>
@@ -71,15 +79,15 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="anayonkar" id="5">
+    <changeSet author="anayonkar" id="6">
         <addPrimaryKey columnNames="aggregate_identifier, sequence_number, type" constraintName="PK_aggregate_id_snapshot" tableName="snapshot_event_entry"/>
     </changeSet>
 
-    <changeSet author="anayonkar" id="6">
+    <changeSet author="anayonkar" id="7">
         <addUniqueConstraint columnNames="event_identifier" constraintName="UK_event_identifier_snapshot" tableName="snapshot_event_entry"/>
     </changeSet>
 
-    <changeSet author="anayonkar" id="7">
+    <changeSet author="anayonkar" id="8">
         <createTable tableName="account_view">
             <column name="id" type="VARCHAR(255)">
                 <constraints nullable="false"/>
@@ -96,7 +104,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="anayonkar" id="8">
+    <changeSet author="anayonkar" id="9">
         <addPrimaryKey columnNames="id" constraintName="PK_account_id" tableName="account_view"/>
     </changeSet>
 

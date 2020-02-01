@@ -2,25 +2,26 @@ package code.exampleaxon.accountdomain.configuration;
 
 import code.exampleaxon.accountdomain.command.domain.Account;
 import code.exampleaxon.accountdomain.query.view.AccountView;
+import org.axonframework.commandhandling.AggregateAnnotationCommandHandler;
 import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.commandhandling.SimpleCommandBus;
-import org.axonframework.commandhandling.annotation.AggregateAnnotationCommandHandler;
-import org.axonframework.commandhandling.annotation.AnnotationCommandHandlerBeanPostProcessor;
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.axonframework.commandhandling.gateway.CommandGatewayFactoryBean;
+import org.axonframework.commandhandling.gateway.CommandGatewayFactory;
+import org.axonframework.commandhandling.gateway.DefaultCommandGateway;
 import org.axonframework.common.jpa.ContainerManagedEntityManagerProvider;
 import org.axonframework.common.jpa.EntityManagerProvider;
+import org.axonframework.common.transaction.NoTransactionManager;
 import org.axonframework.eventhandling.EventBus;
 import org.axonframework.eventhandling.SimpleEventBus;
-import org.axonframework.eventhandling.annotation.AnnotationEventListenerBeanPostProcessor;
 import org.axonframework.eventsourcing.EventSourcingRepository;
-import org.axonframework.eventstore.EventStore;
-import org.axonframework.eventstore.jpa.DomainEventEntry;
-import org.axonframework.eventstore.jpa.JpaEventStore;
-import org.axonframework.eventstore.jpa.SnapshotEventEntry;
-import org.axonframework.serializer.Serializer;
-import org.axonframework.serializer.json.JacksonSerializer;
-import org.axonframework.unitofwork.SpringTransactionManager;
+import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore;
+import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
+import org.axonframework.eventsourcing.eventstore.EventStore;
+import org.axonframework.eventsourcing.eventstore.jpa.DomainEventEntry;
+import org.axonframework.eventsourcing.eventstore.jpa.JpaEventStorageEngine;
+import org.axonframework.eventsourcing.eventstore.jpa.SnapshotEventEntry;
+import org.axonframework.serialization.Serializer;
+import org.axonframework.serialization.json.JacksonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +29,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import static org.axonframework.commandhandling.annotation.AggregateAnnotationCommandHandler.subscribe;
 
 @Configuration
 @EntityScan(basePackageClasses = {
@@ -57,21 +57,22 @@ public class AxonConfiguration {
 
     @Bean
     public CommandBus commandBus() {
-        SimpleCommandBus simpleCommandBus = new SimpleCommandBus();
-        simpleCommandBus.setTransactionManager(new SpringTransactionManager(transactionManager));
-        return simpleCommandBus;
+        return SimpleCommandBus.builder().transactionManager(NoTransactionManager.INSTANCE).build();
     }
 
     @Bean
-    public CommandGatewayFactoryBean<CommandGateway> commandGateway(CommandBus commandBus) {
-        CommandGatewayFactoryBean<CommandGateway> factory = new CommandGatewayFactoryBean<CommandGateway>();
-        factory.setCommandBus(commandBus);
-        return factory;
+    public CommandGateway commandGateway(CommandBus commandBus) {
+        return DefaultCommandGateway.builder().commandBus(commandBus).build();
     }
 
     @Bean
-    public EventStore eventStore(EntityManagerProvider entityManagerProvider, Serializer serializer) {
-        return new JpaEventStore(entityManagerProvider, serializer);
+    public EventStorageEngine eventStorageEngine(EntityManagerProvider entityManagerProvider) {
+        return new JpaEventStorageEngine(entityManagerProvider, NoTransactionManager.INSTANCE);
+    }
+
+    @Bean
+    public EventStore eventStore(EventStorageEngine eventStorageEngine) {
+        return new EmbeddedEventStore(eventStorageEngine);
     }
 
     @Bean
@@ -82,27 +83,15 @@ public class AxonConfiguration {
     @Bean
     public EventSourcingRepository<Account> accountRepository(EventStore eventStore, EventBus eventBus) {
         EventSourcingRepository<Account> repository = new EventSourcingRepository<Account>(Account.class, eventStore);
-        repository.setEventBus(eventBus);
         return repository;
     }
 
     @Bean
-    public AggregateAnnotationCommandHandler commandHandler(EventSourcingRepository<Account> accountRepository,
+    public AggregateAnnotationCommandHandler<Account> commandHandler(EventSourcingRepository<Account> accountRepository,
                                                             CommandBus commandBus) {
-        return  subscribe(Account.class, accountRepository, commandBus);
+        AggregateAnnotationCommandHandler<Account> aggregateAnnotationCommandHandler = new AggregateAnnotationCommandHandler<>(Account.class, accountRepository);
+        aggregateAnnotationCommandHandler.subscribe(commandBus);
+        return aggregateAnnotationCommandHandler;
     }
 
-    @Bean
-    public AnnotationEventListenerBeanPostProcessor annotationEventListenerBeanPostProcessor(EventBus eventBus) {
-        AnnotationEventListenerBeanPostProcessor processor = new AnnotationEventListenerBeanPostProcessor();
-        processor.setEventBus(eventBus);
-        return processor;
-    }
-
-    @Bean
-    public AnnotationCommandHandlerBeanPostProcessor annotationCommandHandlerBeanPostProcessor(CommandBus commandBus) {
-        AnnotationCommandHandlerBeanPostProcessor processor = new AnnotationCommandHandlerBeanPostProcessor();
-        processor.setCommandBus(commandBus);
-        return processor;
-    }
 }

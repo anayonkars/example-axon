@@ -6,7 +6,7 @@ import code.exampleaxon.accountdomain.query.view.AccountView;
 import code.exampleaxon.accountdomain.web.request.*;
 import code.exampleaxon.accountdomain.web.response.OpenAccountResponse;
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.axonframework.domain.IdentifierFactory;
+import org.axonframework.common.IdentifierFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

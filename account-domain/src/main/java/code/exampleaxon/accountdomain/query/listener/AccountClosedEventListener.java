@@ -3,7 +3,7 @@ package code.exampleaxon.accountdomain.query.listener;
 import code.exampleaxon.accountdomain.command.event.AccountClosedEvent;
 import code.exampleaxon.accountdomain.query.repository.AccountViewRepository;
 import code.exampleaxon.accountdomain.query.view.AccountView;
-import org.axonframework.eventhandling.annotation.EventHandler;
+import org.axonframework.eventhandling.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

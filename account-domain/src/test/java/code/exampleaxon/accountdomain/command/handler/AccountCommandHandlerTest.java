@@ -5,11 +5,11 @@ import code.exampleaxon.accountdomain.command.domain.Account;
 import code.exampleaxon.accountdomain.command.event.*;
 import code.exampleaxon.accountdomain.exception.*;
 import org.axonframework.eventsourcing.EventSourcingRepository;
-import org.axonframework.test.FixtureConfiguration;
+import org.axonframework.test.aggregate.AggregateTestFixture;
+import org.axonframework.test.aggregate.FixtureConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.axonframework.test.Fixtures.newGivenWhenThenFixture;
 
 public class AccountCommandHandlerTest {
     private static final String TEST_ID = "test-id";
@@ -19,7 +19,7 @@ public class AccountCommandHandlerTest {
 
     @Before
     public void setup() {
-        fixtureConfiguration = newGivenWhenThenFixture(Account.class);
+        fixtureConfiguration = new AggregateTestFixture<Account>(Account.class);
         eventSourcingRepository = new EventSourcingRepository<>(Account.class, fixtureConfiguration.getEventStore());
         fixtureConfiguration.registerRepository(eventSourcingRepository);
         fixtureConfiguration.registerAnnotatedCommandHandler(new ActivateAccountCommandHandler(eventSourcingRepository));

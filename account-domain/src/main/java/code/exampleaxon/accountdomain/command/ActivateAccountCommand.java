@@ -1,6 +1,7 @@
 package code.exampleaxon.accountdomain.command;
 
-import org.axonframework.commandhandling.annotation.TargetAggregateIdentifier;
+
+import org.axonframework.commandhandling.TargetAggregateIdentifier;
 
 public class ActivateAccountCommand {
     @TargetAggregateIdentifier

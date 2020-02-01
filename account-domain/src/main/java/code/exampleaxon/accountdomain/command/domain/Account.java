@@ -6,15 +6,18 @@ import code.exampleaxon.accountdomain.exception.AccountOperationNotPossibleExcep
 import code.exampleaxon.accountdomain.exception.InsufficientBalanceException;
 import code.exampleaxon.accountdomain.exception.InvalidAmountException;
 import code.exampleaxon.accountdomain.web.vo.AccountStatus;
-import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
-import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
-import org.axonframework.eventsourcing.annotation.EventSourcingHandler;
+import org.axonframework.commandhandling.model.AggregateIdentifier;
+import org.axonframework.commandhandling.model.AggregateLifecycle;
+import org.axonframework.commandhandling.model.AggregateRoot;
+import org.axonframework.eventsourcing.EventSourcingHandler;
 
 import javax.persistence.Id;
 
 import static code.exampleaxon.accountdomain.web.vo.AccountStatus.*;
+import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
 
-public class Account extends AbstractAnnotatedAggregateRoot<String> {
+@AggregateRoot
+public class Account {
     @AggregateIdentifier
     @Id
     private String id;

@@ -2,7 +2,7 @@ package code.exampleaxon.accountdomain.command.handler;
 
 import code.exampleaxon.accountdomain.command.OpenAccountCommand;
 import code.exampleaxon.accountdomain.command.domain.Account;
-import org.axonframework.commandhandling.annotation.CommandHandler;
+import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ public class OpenAccountCommandHandler {
     }
 
     @CommandHandler
-    public void handle(OpenAccountCommand command) {
-        repository.add(new Account(command.getId(), command.getName()));
+    public void handle(OpenAccountCommand command) throws Exception {
+        repository.newInstance(() -> {return new Account(command.getId(), command.getName());});
     }
 }
