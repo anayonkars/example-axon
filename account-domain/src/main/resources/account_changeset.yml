@@ -1,0 +1,188 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: anayonkar
+      changes:
+        - createSequence:
+            sequenceName: hibernate_sequence
+            cycle: true
+            incrementBy: 1
+            ordered: true
+            startValue: 1
+  - changeset:
+      id: 2
+      author: anayonkar
+      changes:
+        - createTable:
+            tableName: domain_event_entry
+            columns:
+              - column:
+                  name: aggregate_identifier
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sequence_number
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: event_identifier
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: payload_revision
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: payload_revision
+                  type: VARCHAR(255)
+              - column:
+                  name: payload_type
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time_stamp
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: meta_data
+                  type: LONGBLOB
+              - column:
+                  name: payload
+                  type: LONGBLOB
+                  constraints:
+                    nullable: false
+              - column:
+                  name: global_index
+                  valueComputed: hibernate_sequence.nextval
+                  type: BIGINT
+  - changeset:
+      id: 3
+      author: anayonkar
+      changes:
+        - addPrimaryKey:
+            columnNames: aggregate_identifier, sequence_number, type
+            constraintName: PK_aggregate_id
+            tableName: domain_event_entry
+  - changeset:
+      id: 4
+      author: anayonkar
+      changes:
+        - addUniqueConstraint:
+            columnNames: event_identifier
+            constraintName: UK_event_identifier
+            tableName: domain_event_entry
+  - changeset:
+      id: 5
+      author: anayonkar
+      changes:
+        - createTable:
+            tableName: snapshot_event_entry
+            columns:
+              - column:
+                  name: aggregate_identifier
+                  type: VARCHAR2(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: aggregate_identifier
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sequence_number
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: VARCHAR2(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: event_identifier
+                  type: VARCHAR2(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: payload_revision
+                  type: VARCHAR2(255)
+              - column:
+                  name: payload_type
+                  type: VARCHAR2(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time_stampt
+                  type: VARCHAR2(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: meta_data
+                  type: LONGBLOB
+              - column:
+                  name: payload
+                  type: LONGBLOB
+                  constraints:
+                    nullable: false
+  - changeset:
+      id: 6
+      author: anayonkar
+      changes:
+        - addPrimaryKey:
+            columnNames: aggregate_identifier, sequence_number, type
+            constraintName: PK_aggregate_id_snapshot
+            tableName: snapshot_event_entry
+  - changeset:
+      id: 7
+      author: anayonkar
+      changes:
+        - addUniqueConstraint:
+            columnNames: event_identifier
+            constraintName: UK_event_identifier_snapshot
+            tableName: snapshot_event_entry
+  - changeset:
+      id: 8
+      author: anayonkar
+      changes:
+        - createTable:
+            tableName: ACCOUNT_VIEW
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR2(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR2(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: balance
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR2(255)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 9
+      author: anayonkar
+      changes:
+        - addPrimaryKey:
+            columnNames: id
+            constraintName: PK_account_id
+            tableName: ACCOUNT_VIEW
