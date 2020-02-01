@@ -67,6 +67,6 @@ public class AccountController {
     @GetMapping(value = "get/{id}",
             produces = {APPLICATION_JSON})
     public AccountView getAccount(@PathVariable String id) {
-        return repository.findOne(id);
+        return repository.findById(id).orElse(null);
     }
 }

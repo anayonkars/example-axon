@@ -18,7 +18,7 @@ public class AmountCreditedEventListener {
 
     @EventHandler
     public void on(AmountCreditedEvent event) {
-        AccountView accountView = accountViewRepository.findOne(event.getId());
+        AccountView accountView = accountViewRepository.findById(event.getId()).get();
         int balance = accountView.getBalance() + event.getAmount();
         accountView.setBalance(balance);
         accountViewRepository.save(accountView);

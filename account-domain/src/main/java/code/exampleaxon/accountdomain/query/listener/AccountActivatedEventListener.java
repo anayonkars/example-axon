@@ -20,7 +20,7 @@ public class AccountActivatedEventListener {
 
     @EventHandler
     public void on(AccountActivatedEvent event) {
-        AccountView accountView = accountViewRepository.findOne(event.getId());
+        AccountView accountView = accountViewRepository.findById(event.getId()).get();
         accountView.setStatus(ACCOUNT_STATUS_ACTIVE);
         accountViewRepository.save(accountView);
     }
