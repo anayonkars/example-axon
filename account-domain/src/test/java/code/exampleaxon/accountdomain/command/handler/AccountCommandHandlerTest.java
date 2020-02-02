@@ -19,7 +19,7 @@ public class AccountCommandHandlerTest {
 
     @Before
     public void setup() {
-        fixtureConfiguration = new AggregateTestFixture<Account>(Account.class);
+        fixtureConfiguration = new AggregateTestFixture<>(Account.class);
         eventSourcingRepository = new EventSourcingRepository<>(Account.class, fixtureConfiguration.getEventStore());
         fixtureConfiguration.registerRepository(eventSourcingRepository);
         fixtureConfiguration.registerAnnotatedCommandHandler(new ActivateAccountCommandHandler(eventSourcingRepository));
@@ -31,151 +31,139 @@ public class AccountCommandHandlerTest {
 
     @Test
     public void expectAccountActivation() {
-        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID,
-                TEST_NAME))
-                .when(new ActivateAccountCommand(TEST_ID))
-                .expectEvents(new AccountActivatedEvent
-                        (TEST_ID));
+        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID, TEST_NAME))
+                            .when(new ActivateAccountCommand(TEST_ID))
+                            .expectEvents(new AccountActivatedEvent(TEST_ID));
     }
 
     @Test
     public void expectExceptionWhenReactivatingAccount() {
-        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID,
-                TEST_NAME), new AccountActivatedEvent(TEST_ID))
+        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID, TEST_NAME), new AccountActivatedEvent(TEST_ID))
                 .when(new ActivateAccountCommand(TEST_ID))
-                .expectException
-                        (AccountStateChangeNotValidException.class);
+                .expectException(AccountStateChangeNotValidException.class);
     }
 
     @Test
     public void expectAccountClosure() {
-        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID,
-                TEST_NAME), new AccountActivatedEvent(TEST_ID))
-                .when(new CloseAccountCommand(TEST_ID))
-                .expectEvents(new AccountClosedEvent(TEST_ID));
+        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID, TEST_NAME), new AccountActivatedEvent(TEST_ID))
+                            .when(new CloseAccountCommand(TEST_ID))
+                            .expectEvents(new AccountClosedEvent(TEST_ID));
     }
 
     @Test
     public void expectExceptionWhenReclosingAccount() {
-        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID,
-                TEST_NAME), new AccountActivatedEvent(TEST_ID), new
-                AccountClosedEvent(TEST_ID))
-                .when(new CloseAccountCommand(TEST_ID))
-                .expectException(AccountStateChangeNotValidException.class);
+        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID, TEST_NAME),
+                                    new AccountActivatedEvent(TEST_ID),
+                                    new AccountClosedEvent(TEST_ID))
+                            .when(new CloseAccountCommand(TEST_ID))
+                            .expectException(AccountStateChangeNotValidException.class);
     }
 
     @Test
     public void expectExceptionWhenActivatingClosedAccount() {
-        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID,
-                TEST_NAME), new AccountActivatedEvent(TEST_ID), new
-                AccountClosedEvent(TEST_ID))
-                .when(new ActivateAccountCommand(TEST_ID))
-                .expectException(AccountStateChangeNotValidException.class);
+        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID, TEST_NAME),
+                                    new AccountActivatedEvent(TEST_ID),
+                                    new AccountClosedEvent(TEST_ID))
+                            .when(new ActivateAccountCommand(TEST_ID))
+                            .expectException(AccountStateChangeNotValidException.class);
     }
 
     @Test
     public void expectExceptionWhenClosingAccountWithBalance() {
-        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID,
-                TEST_NAME), new AccountActivatedEvent(TEST_ID), new
-                AmountCreditedEvent(TEST_ID, 100))
-                .when(new CloseAccountCommand(TEST_ID))
-                .expectException(AccountClosureNotValidException.class);
+        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID, TEST_NAME),
+                                    new AccountActivatedEvent(TEST_ID),
+                                    new AmountCreditedEvent(TEST_ID, 100))
+                            .when(new CloseAccountCommand(TEST_ID))
+                            .expectException(AccountClosureNotValidException.class);
     }
 
     @Test
     public void expectCreditOperation() {
-        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID,
-                TEST_NAME), new AccountActivatedEvent(TEST_ID))
-                .when(new CreditAmountCommand(TEST_ID, 100))
-                .expectEvents(new AmountCreditedEvent(TEST_ID,
-                        100));
+        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID, TEST_NAME), new AccountActivatedEvent(TEST_ID))
+                            .when(new CreditAmountCommand(TEST_ID, 100))
+                            .expectEvents(new AmountCreditedEvent(TEST_ID, 100));
     }
 
     @Test
     public void expectExceptionForCreditOperationForNonActivatedAccount() {
-        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID,
-                TEST_NAME))
-                .when(new CreditAmountCommand(TEST_ID, 100))
-                .expectException(AccountOperationNotPossibleException.class);
+        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID, TEST_NAME))
+                            .when(new CreditAmountCommand(TEST_ID, 100))
+                            .expectException(AccountOperationNotPossibleException.class);
     }
 
     @Test
     public void expectExceptionForCreditOperationForClosedAccount() {
-        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID,
-                TEST_NAME), new AccountActivatedEvent(TEST_ID), new
-                AccountClosedEvent(TEST_ID))
-                .when(new CreditAmountCommand(TEST_ID, 100))
-                .expectException(AccountOperationNotPossibleException.class);
+        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID, TEST_NAME),
+                                    new AccountActivatedEvent(TEST_ID),
+                                    new AccountClosedEvent(TEST_ID))
+                            .when(new CreditAmountCommand(TEST_ID, 100))
+                            .expectException(AccountOperationNotPossibleException.class);
     }
 
     @Test
     public void expectExceptionForCreditOperationForInvalidAmount() {
-        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID,
-                TEST_NAME), new AccountActivatedEvent(TEST_ID))
-                .when(new CreditAmountCommand(TEST_ID, -100))
-                .expectException(InvalidAmountException.class);
+        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID, TEST_NAME),
+                                    new AccountActivatedEvent(TEST_ID))
+                            .when(new CreditAmountCommand(TEST_ID, -100))
+                            .expectException(InvalidAmountException.class);
     }
 
     @Test
     public void expectDebitOperation() {
-        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID,
-                TEST_NAME), new AccountActivatedEvent(TEST_ID), new
-                AmountCreditedEvent(TEST_ID, 100))
-                .when(new DebitAmountCommand(TEST_ID, 100))
-                .expectEvents(new AmountDebitedEvent(TEST_ID, 100));
+        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID, TEST_NAME),
+                                    new AccountActivatedEvent(TEST_ID),
+                                    new AmountCreditedEvent(TEST_ID, 100))
+                            .when(new DebitAmountCommand(TEST_ID, 100))
+                            .expectEvents(new AmountDebitedEvent(TEST_ID, 100));
     }
 
     @Test
     public void expectExceptionForDebitOperationForNonActivatedAccount() {
-        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID,
-                TEST_NAME))
-                .when(new DebitAmountCommand(TEST_ID, 100))
-                .expectException(AccountOperationNotPossibleException.class);
+        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID, TEST_NAME))
+                            .when(new DebitAmountCommand(TEST_ID, 100))
+                            .expectException(AccountOperationNotPossibleException.class);
     }
 
     @Test
     public void expectExceptionForDebitOperationForClosedAccount() {
-        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID,
-                TEST_NAME), new AccountActivatedEvent(TEST_ID), new
-                AccountClosedEvent(TEST_ID))
-                .when(new DebitAmountCommand(TEST_ID, 100))
-                .expectException(AccountOperationNotPossibleException.class);
+        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID, TEST_NAME),
+                                    new AccountActivatedEvent(TEST_ID),
+                                    new AccountClosedEvent(TEST_ID))
+                            .when(new DebitAmountCommand(TEST_ID, 100))
+                            .expectException(AccountOperationNotPossibleException.class);
     }
 
     @Test
     public void expectExceptionForDebitOperationForInvalidAmount() {
-        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID,
-                TEST_NAME), new AccountActivatedEvent(TEST_ID))
-                .when(new DebitAmountCommand(TEST_ID, -100))
-                .expectException(InvalidAmountException.class);
+        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID, TEST_NAME), new AccountActivatedEvent(TEST_ID))
+                            .when(new DebitAmountCommand(TEST_ID, -100))
+                            .expectException(InvalidAmountException.class);
     }
 
     @Test
     public void expectInsufficientBalanceException() {
-        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID,
-                        TEST_NAME), new AccountActivatedEvent(TEST_ID),
-                new AmountCreditedEvent(TEST_ID, 100))
-                .when(new DebitAmountCommand(TEST_ID, 200))
-                .expectException(InsufficientBalanceException.class);
+        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID, TEST_NAME),
+                                    new AccountActivatedEvent(TEST_ID),
+                                    new AmountCreditedEvent(TEST_ID, 100))
+                            .when(new DebitAmountCommand(TEST_ID, 200))
+                            .expectException(InsufficientBalanceException.class);
     }
 
     @Test
     public void expectSuccessfulClosure() {
-        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID,
-                        TEST_NAME), new AccountActivatedEvent(TEST_ID),
-                new AmountCreditedEvent(TEST_ID, 100), new
-                        AmountDebitedEvent(TEST_ID, 100))
-                .when(new CloseAccountCommand(TEST_ID))
-                .expectEvents(new AccountClosedEvent(TEST_ID));
+        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID, TEST_NAME),
+                                    new AccountActivatedEvent(TEST_ID),
+                                    new AmountCreditedEvent(TEST_ID, 100),
+                                    new AmountDebitedEvent(TEST_ID, 100))
+                            .when(new CloseAccountCommand(TEST_ID))
+                            .expectEvents(new AccountClosedEvent(TEST_ID));
     }
 
     @Test
     public void expectAccountOpenedEvent() {
         fixtureConfiguration.given()
-                .when(new OpenAccountCommand(TEST_ID,
-                        TEST_NAME))
-                .expectEvents(new AccountOpenedEvent(TEST_ID,
-                        TEST_NAME));
+                            .when(new OpenAccountCommand(TEST_ID, TEST_NAME))
+                            .expectEvents(new AccountOpenedEvent(TEST_ID, TEST_NAME));
     }
 
 }

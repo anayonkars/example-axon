@@ -6,15 +6,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.util.Arrays.asList;
+
 public class AccountStatus {
     public static final String ACCOUNT_STATUS_OPEN = "OPEN";
     public static final String ACCOUNT_STATUS_ACTIVE = "ACTIVE";
     public static final String ACCOUNT_STATUS_CLOSE = "CLOSE";
 
-    private static final List<String> accountLifeCycle = new ArrayList<>(Arrays.asList(
-                                                                            ACCOUNT_STATUS_OPEN,
-                                                                            ACCOUNT_STATUS_ACTIVE,
-                                                                            ACCOUNT_STATUS_CLOSE));
+    private static final List<String> accountLifeCycle = new ArrayList<>(asList(
+                                                                        ACCOUNT_STATUS_OPEN,
+                                                                        ACCOUNT_STATUS_ACTIVE,
+                                                                        ACCOUNT_STATUS_CLOSE));
 
     private static boolean isValidChange(String currentStatus, String nextStatus) {
         return currentStatus != null

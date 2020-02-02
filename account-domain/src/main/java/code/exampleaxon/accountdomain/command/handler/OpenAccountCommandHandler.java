@@ -18,6 +18,6 @@ public class OpenAccountCommandHandler {
 
     @CommandHandler
     public void handle(OpenAccountCommand command) throws Exception {
-        repository.newInstance(() -> {return new Account(command.getId(), command.getName());});
+        repository.newInstance(() -> new Account(command.getId(), command.getName()));
     }
 }

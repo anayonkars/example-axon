@@ -7,7 +7,6 @@ import code.exampleaxon.accountdomain.exception.InsufficientBalanceException;
 import code.exampleaxon.accountdomain.exception.InvalidAmountException;
 import code.exampleaxon.accountdomain.web.vo.AccountStatus;
 import org.axonframework.commandhandling.model.AggregateIdentifier;
-import org.axonframework.commandhandling.model.AggregateLifecycle;
 import org.axonframework.commandhandling.model.AggregateRoot;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 

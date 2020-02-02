@@ -6,7 +6,6 @@ import org.axonframework.commandhandling.AggregateAnnotationCommandHandler;
 import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.commandhandling.SimpleCommandBus;
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.axonframework.commandhandling.gateway.CommandGatewayFactory;
 import org.axonframework.commandhandling.gateway.DefaultCommandGateway;
 import org.axonframework.common.jpa.ContainerManagedEntityManagerProvider;
 import org.axonframework.common.jpa.EntityManagerProvider;
@@ -22,12 +21,10 @@ import org.axonframework.eventsourcing.eventstore.jpa.JpaEventStorageEngine;
 import org.axonframework.eventsourcing.eventstore.jpa.SnapshotEventEntry;
 import org.axonframework.serialization.Serializer;
 import org.axonframework.serialization.json.JacksonSerializer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.transaction.PlatformTransactionManager;
 
 
 @Configuration
@@ -41,9 +38,6 @@ import org.springframework.transaction.PlatformTransactionManager;
         "code.exampleaxon.accountdomain.query",
 })
 public class AxonConfiguration {
-
-    @Autowired
-    private PlatformTransactionManager transactionManager;
 
     @Bean
     public EntityManagerProvider entityManagerProvider() {
@@ -82,8 +76,7 @@ public class AxonConfiguration {
 
     @Bean
     public EventSourcingRepository<Account> accountRepository(EventStore eventStore, EventBus eventBus) {
-        EventSourcingRepository<Account> repository = new EventSourcingRepository<Account>(Account.class, eventStore);
-        return repository;
+        return new EventSourcingRepository<Account>(Account.class, eventStore);
     }
 
     @Bean
