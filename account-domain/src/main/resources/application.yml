@@ -1,5 +1,5 @@
-# To configure mysql on Ubuntu 18.04
-# https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-18-04
+# Example configuration using an embedded H2 database
+# https://www.h2database.com/html/main.html
 server:
   port: 8800
 logging.level:
