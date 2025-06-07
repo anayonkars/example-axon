@@ -21,6 +21,8 @@ public class AccountStatus {
     private static boolean isValidChange(String currentStatus, String nextStatus) {
         return currentStatus != null
                 && nextStatus != null
+                && accountLifeCycle.contains(currentStatus)
+                && accountLifeCycle.contains(nextStatus)
                 && accountLifeCycle.indexOf(currentStatus) < accountLifeCycle.indexOf(nextStatus);
     }
 
