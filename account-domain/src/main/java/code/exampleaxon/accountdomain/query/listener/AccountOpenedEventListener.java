@@ -7,7 +7,7 @@ import org.axonframework.eventhandling.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static code.exampleaxon.accountdomain.web.vo.AccountStatus.ACCOUNT_STATUS_OPEN;
+import static code.exampleaxon.accountdomain.command.domain.AccountStatus.OPEN;
 
 @Component
 public class AccountOpenedEventListener {
@@ -22,7 +22,7 @@ public class AccountOpenedEventListener {
     public void on(AccountOpenedEvent event) {
         AccountView accountView = new AccountView(event.getId(), event.getName());
         accountView.setBalance(0);
-        accountView.setStatus(ACCOUNT_STATUS_OPEN);
+        accountView.setStatus(OPEN);
         accountViewRepository.save(accountView);
     }
 }

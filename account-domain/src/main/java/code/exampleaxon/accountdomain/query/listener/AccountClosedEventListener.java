@@ -7,7 +7,7 @@ import org.axonframework.eventhandling.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static code.exampleaxon.accountdomain.web.vo.AccountStatus.ACCOUNT_STATUS_CLOSE;
+import static code.exampleaxon.accountdomain.command.domain.AccountStatus.CLOSE;
 
 @Component
 public class AccountClosedEventListener {
@@ -20,8 +20,9 @@ public class AccountClosedEventListener {
 
     @EventHandler
     public void on(AccountClosedEvent event) {
-        AccountView accountView = accountViewRepository.findById(event.getId()).get();
-        accountView.setStatus(ACCOUNT_STATUS_CLOSE);
+        AccountView accountView = accountViewRepository.findById(event.getId())
+                .orElseThrow(() -> new IllegalStateException("Account not found: " + event.getId()));
+        accountView.setStatus(CLOSE);
         accountViewRepository.save(accountView);
     }
 }

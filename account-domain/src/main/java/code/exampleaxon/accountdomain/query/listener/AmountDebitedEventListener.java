@@ -18,7 +18,8 @@ public class AmountDebitedEventListener {
 
     @EventHandler
     public void on(AmountDebitedEvent event) {
-        AccountView accountView = accountViewRepository.findById(event.getId()).get();
+        AccountView accountView = accountViewRepository.findById(event.getId())
+                .orElseThrow(() -> new IllegalStateException("Account not found: " + event.getId()));
         int balance = accountView.getBalance() - event.getAmount();
         accountView.setBalance(balance);
         accountViewRepository.save(accountView);
