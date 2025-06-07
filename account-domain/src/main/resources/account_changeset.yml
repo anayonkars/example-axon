@@ -9,7 +9,7 @@ databaseChangeLog:
             incrementBy: 1
             ordered: true
             startValue: 1
-  - changeset:
+  - changeSet:
       id: 2
       author: anayonkar
       changes:
@@ -66,7 +66,7 @@ databaseChangeLog:
                   name: global_index
                   valueComputed: hibernate_sequence.nextval
                   type: BIGINT
-  - changeset:
+  - changeSet:
       id: 3
       author: anayonkar
       changes:
@@ -74,7 +74,7 @@ databaseChangeLog:
             columnNames: aggregate_identifier, sequence_number, type
             constraintName: PK_aggregate_id
             tableName: domain_event_entry
-  - changeset:
+  - changeSet:
       id: 4
       author: anayonkar
       changes:
@@ -82,7 +82,7 @@ databaseChangeLog:
             columnNames: event_identifier
             constraintName: UK_event_identifier
             tableName: domain_event_entry
-  - changeset:
+  - changeSet:
       id: 5
       author: anayonkar
       changes:
@@ -135,7 +135,7 @@ databaseChangeLog:
                   type: LONGBLOB
                   constraints:
                     nullable: false
-  - changeset:
+  - changeSet:
       id: 6
       author: anayonkar
       changes:
@@ -143,7 +143,7 @@ databaseChangeLog:
             columnNames: aggregate_identifier, sequence_number, type
             constraintName: PK_aggregate_id_snapshot
             tableName: snapshot_event_entry
-  - changeset:
+  - changeSet:
       id: 7
       author: anayonkar
       changes:
@@ -151,7 +151,7 @@ databaseChangeLog:
             columnNames: event_identifier
             constraintName: UK_event_identifier_snapshot
             tableName: snapshot_event_entry
-  - changeset:
+  - changeSet:
       id: 8
       author: anayonkar
       changes:
