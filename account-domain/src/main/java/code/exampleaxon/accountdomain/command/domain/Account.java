@@ -5,14 +5,14 @@ import code.exampleaxon.accountdomain.exception.AccountClosureNotValidException;
 import code.exampleaxon.accountdomain.exception.AccountOperationNotPossibleException;
 import code.exampleaxon.accountdomain.exception.InsufficientBalanceException;
 import code.exampleaxon.accountdomain.exception.InvalidAmountException;
-import code.exampleaxon.accountdomain.web.vo.AccountStatus;
+import code.exampleaxon.accountdomain.command.domain.AccountStatus;
 import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.commandhandling.model.AggregateRoot;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 
 import javax.persistence.Id;
 
-import static code.exampleaxon.accountdomain.web.vo.AccountStatus.*;
+import static code.exampleaxon.accountdomain.command.domain.AccountStatus.*;
 import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
 
 @AggregateRoot
@@ -22,7 +22,7 @@ public class Account {
     private String id;
     private String name;
     private int balance;
-    private String status;
+    private AccountStatus status;
 
     public Account() {
     }
@@ -32,12 +32,12 @@ public class Account {
     }
 
     public void activate() {
-        validateAccountStateChange(this.id, this.status, ACCOUNT_STATUS_ACTIVE);
+        validateAccountStateChange(this.id, this.status, ACTIVE);
         apply(new AccountActivatedEvent(this.id));
     }
 
     public void close() {
-        validateAccountStateChange(this.id, this.status, ACCOUNT_STATUS_CLOSE);
+        validateAccountStateChange(this.id, this.status, CLOSE);
         validateEligibilityForClosure();
         apply(new AccountClosedEvent(this.id));
     }
@@ -57,17 +57,17 @@ public class Account {
         this.id = event.getId();
         this.name = event.getName();
         this.balance = 0;
-        this.status = AccountStatus.ACCOUNT_STATUS_OPEN;
+        this.status = OPEN;
     }
 
     @EventSourcingHandler
     public void on(AccountActivatedEvent event) {
-        this.status = ACCOUNT_STATUS_ACTIVE;
+        this.status = ACTIVE;
     }
 
     @EventSourcingHandler
     public void on(AccountClosedEvent event) {
-        this.status = ACCOUNT_STATUS_CLOSE;
+        this.status = CLOSE;
     }
 
     @EventSourcingHandler
@@ -87,8 +87,8 @@ public class Account {
     }
 
     private void validateEligibilityForOperation() {
-        if(!ACCOUNT_STATUS_ACTIVE.equals(status)) {
-            throw new AccountOperationNotPossibleException(id, status);
+        if(status != ACTIVE) {
+            throw new AccountOperationNotPossibleException(id, status.name());
         }
     }
 
@@ -127,7 +127,7 @@ public class Account {
         return balance;
     }
 
-    public String getStatus() {
+    public AccountStatus getStatus() {
         return status;
     }
 }

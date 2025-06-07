@@ -1,7 +1,10 @@
 package code.exampleaxon.accountdomain.query.view;
 
 
+import code.exampleaxon.accountdomain.command.domain.AccountStatus;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 
 @Entity
@@ -10,7 +13,8 @@ public class AccountView {
     private String id;
     private String name;
     private int balance;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private AccountStatus status;
 
     public AccountView() {
     }
@@ -44,11 +48,11 @@ public class AccountView {
         this.balance = balance;
     }
 
-    public String getStatus() {
+    public AccountStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(AccountStatus status) {
         this.status = status;
     }
 }
