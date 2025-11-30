@@ -1,0 +1,30 @@
+# Test configuration
+server:
+  port: 8800
+logging.level:
+  root: INFO
+  org.springframework.web: INFO
+  org.hibernate: INFO
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+    hibernate:
+      show_sql: true
+      use_sql_comments: true
+      format_sql: true
+      ddl-auto: update
+  h2:
+    console:
+      enabled: true
+
+liquibase:
+  change-log:
+    classpath:account_changeset.xml
