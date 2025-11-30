@@ -1,0 +1,15 @@
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.data:spring-data-commons'
+    implementation 'org.springframework:spring-tx'
+    implementation 'org.liquibase:liquibase-core'
+    implementation "org.axonframework:axon-spring-boot-starter:${axonVersion}"
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'javax.ws.rs:javax.ws.rs-api:2.0'
+    runtimeOnly 'com.h2database:h2'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation "org.axonframework:axon-test:${axonVersion}"
+    testImplementation 'junit:junit'
+}
