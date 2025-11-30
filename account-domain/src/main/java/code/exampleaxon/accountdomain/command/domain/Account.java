@@ -5,20 +5,25 @@ import code.exampleaxon.accountdomain.exception.AccountClosureNotValidException;
 import code.exampleaxon.accountdomain.exception.AccountOperationNotPossibleException;
 import code.exampleaxon.accountdomain.exception.InsufficientBalanceException;
 import code.exampleaxon.accountdomain.exception.InvalidAmountException;
-import code.exampleaxon.accountdomain.command.domain.AccountStatus;
-import org.axonframework.commandhandling.model.AggregateIdentifier;
-import org.axonframework.commandhandling.model.AggregateRoot;
+import org.axonframework.modelling.command.AggregateIdentifier;
+import org.axonframework.modelling.command.AggregateRoot;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 
+import org.axonframework.spring.stereotype.Aggregate;
+
+import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import static code.exampleaxon.accountdomain.command.domain.AccountStatus.*;
-import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
+import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
+@Entity
 @AggregateRoot
+@Aggregate
 public class Account {
-    @AggregateIdentifier
+
     @Id
+    @AggregateIdentifier
     private String id;
     private String name;
     private int balance;
@@ -81,25 +86,25 @@ public class Account {
     }
 
     private void validateEligibilityForClosure() {
-        if(balance != 0) {
+        if (balance != 0) {
             throw new AccountClosureNotValidException(id, balance);
         }
     }
 
     private void validateEligibilityForOperation() {
-        if(status != ACTIVE) {
+        if (status != ACTIVE) {
             throw new AccountOperationNotPossibleException(id, status.name());
         }
     }
 
     private void validateAmount(int amount) {
-        if(amount < 0) {
+        if (amount < 0) {
             throw new InvalidAmountException(id, amount);
         }
     }
 
     private void validateAmountForDebit(int amount) {
-        if(amount > balance) {
+        if (amount > balance) {
             throw new InsufficientBalanceException(id, balance);
         }
     }
