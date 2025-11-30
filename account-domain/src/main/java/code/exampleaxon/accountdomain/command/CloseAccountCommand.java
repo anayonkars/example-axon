@@ -1,7 +1,6 @@
 package code.exampleaxon.accountdomain.command;
 
-
-import org.axonframework.commandhandling.TargetAggregateIdentifier;
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 public class CloseAccountCommand {
     @TargetAggregateIdentifier
