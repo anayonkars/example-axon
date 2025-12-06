@@ -1,18 +1,13 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
                    http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
     <changeSet id="1" author="anayonkar">
-        <createSequence sequenceName="hibernate_sequence"
-                        cycle="true"
-                        incrementBy="1"
-                        ordered="true"
-                        startValue="1"/>
+        <createSequence sequenceName="hibernate_sequence" cycle="true" incrementBy="1" ordered="true" startValue="1"/>
     </changeSet>
     <changeSet author="anayonkar" id="2">
         <createTable tableName="domain_event_entry">
@@ -106,6 +101,22 @@
 
     <changeSet author="anayonkar" id="9">
         <addPrimaryKey columnNames="id" constraintName="PK_account_id" tableName="account_view"/>
+    </changeSet>
+
+    <changeSet author="antigravity" id="10">
+        <createTable tableName="token_entry">
+            <column name="processor_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="segment" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token" type="LONGBLOB"/>
+            <column name="token_type" type="VARCHAR(255)"/>
+            <column name="timestamp" type="VARCHAR(255)"/>
+            <column name="owner" type="VARCHAR(255)"/>
+        </createTable>
+        <addPrimaryKey columnNames="processor_name, segment" constraintName="PK_token_entry" tableName="token_entry"/>
     </changeSet>
 
 </databaseChangeLog>

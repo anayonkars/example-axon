@@ -11,18 +11,13 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 
 import org.axonframework.spring.stereotype.Aggregate;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
 import static code.exampleaxon.accountdomain.command.domain.AccountStatus.*;
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
-@Entity
 @AggregateRoot
 @Aggregate
 public class Account {
 
-    @Id
     @AggregateIdentifier
     private String id;
     private String name;
