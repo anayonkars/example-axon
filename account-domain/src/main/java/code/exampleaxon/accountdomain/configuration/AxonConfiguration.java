@@ -2,6 +2,7 @@ package code.exampleaxon.accountdomain.configuration;
 
 import code.exampleaxon.accountdomain.command.domain.Account;
 import code.exampleaxon.accountdomain.query.view.AccountView;
+import org.axonframework.eventhandling.tokenstore.jpa.TokenEntry;
 import org.axonframework.eventsourcing.eventstore.jpa.DomainEventEntry;
 import org.axonframework.eventsourcing.eventstore.jpa.SnapshotEventEntry;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -12,7 +13,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackageClasses = {
                 DomainEventEntry.class,
                 SnapshotEventEntry.class,
-                Account.class,
+                TokenEntry.class,
                 AccountView.class
 })
 @EnableJpaRepositories(basePackages = {

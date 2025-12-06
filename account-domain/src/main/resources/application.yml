@@ -29,3 +29,7 @@ spring:
 liquibase:
   change-log:
     classpath:account_changeset.xml
+
+axon:
+  axonserver:
+    enabled: false

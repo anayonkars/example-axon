@@ -1,13 +1,14 @@
 package code.exampleaxon.accountdomain.query.view;
 
-
 import code.exampleaxon.accountdomain.command.domain.AccountStatus;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 
 @Entity
+@Table(name = "account_view")
 public class AccountView {
     @Id
     private String id;
