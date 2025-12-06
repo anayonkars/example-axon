@@ -37,6 +37,7 @@ axon:
 management:
   endpoints:
     web:
+      base-path: /account-domain
       exposure:
         include: health,info,metrics
 
