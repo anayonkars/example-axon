@@ -8,13 +8,19 @@ import code.exampleaxon.accountdomain.web.response.OpenAccountResponse;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.common.IdentifierFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import javax.validation.Valid;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/account")
 public class AccountController {
+    private static final long COMMAND_TIMEOUT_SECONDS = 5;
+
     private final IdentifierFactory identifierFactory = IdentifierFactory.getInstance();
 
     private final CommandGateway commandGateway;
@@ -27,46 +33,46 @@ public class AccountController {
     }
 
     @PostMapping(value = "open",
-            consumes = {APPLICATION_JSON},
-            produces = {APPLICATION_JSON})
-    public OpenAccountResponse openAccount(@RequestBody OpenAccountRequest request) {
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public OpenAccountResponse openAccount(@Valid @RequestBody OpenAccountRequest request) {
         String id = identifierFactory.generateIdentifier();
-        commandGateway.sendAndWait(new OpenAccountCommand(id, request.getName()));
-        OpenAccountResponse response = new OpenAccountResponse(id);
-        return response;
+        commandGateway.sendAndWait(new OpenAccountCommand(id, request.getName()), COMMAND_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+        return new OpenAccountResponse(id);
     }
 
     @PostMapping(value = "activate",
-            consumes = {APPLICATION_JSON},
-            produces = {APPLICATION_JSON})
-    public void activateAccount(@RequestBody ActivateAccountRequest request) {
-        commandGateway.sendAndWait(new ActivateAccountCommand(request.getId()));
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void activateAccount(@Valid @RequestBody ActivateAccountRequest request) {
+        commandGateway.sendAndWait(new ActivateAccountCommand(request.getId()), COMMAND_TIMEOUT_SECONDS, TimeUnit.SECONDS);
     }
 
     @PostMapping(value = "close",
-            consumes = {APPLICATION_JSON},
-            produces = {APPLICATION_JSON})
-    public void closeAccount(@RequestBody CloseAccountRequest request) {
-        commandGateway.sendAndWait(new CloseAccountCommand(request.getId()));
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void closeAccount(@Valid @RequestBody CloseAccountRequest request) {
+        commandGateway.sendAndWait(new CloseAccountCommand(request.getId()), COMMAND_TIMEOUT_SECONDS, TimeUnit.SECONDS);
     }
 
     @PostMapping(value = "credit",
-            consumes = {APPLICATION_JSON},
-            produces = {APPLICATION_JSON})
-    public void creditAmount(@RequestBody CreditAmountRequest request) {
-        commandGateway.sendAndWait(new CreditAmountCommand(request.getId(), request.getAmount()));
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void creditAmount(@Valid @RequestBody CreditAmountRequest request) {
+        commandGateway.sendAndWait(new CreditAmountCommand(request.getId(), request.getAmount()), COMMAND_TIMEOUT_SECONDS, TimeUnit.SECONDS);
     }
 
     @PostMapping(value = "debit",
-            consumes = {APPLICATION_JSON},
-            produces = {APPLICATION_JSON})
-    public void debitAmount(@RequestBody DebitAmountRequest request) {
-        commandGateway.sendAndWait(new DebitAmountCommand(request.getId(), request.getAmount()));
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void debitAmount(@Valid @RequestBody DebitAmountRequest request) {
+        commandGateway.sendAndWait(new DebitAmountCommand(request.getId(), request.getAmount()), COMMAND_TIMEOUT_SECONDS, TimeUnit.SECONDS);
     }
 
     @GetMapping(value = "get/{id}",
-            produces = {APPLICATION_JSON})
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public AccountView getAccount(@PathVariable String id) {
-        return repository.findById(id).orElse(null);
+        return repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found: " + id));
     }
 }

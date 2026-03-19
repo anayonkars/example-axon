@@ -1,6 +1,9 @@
 package code.exampleaxon.accountdomain.command;
 
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
+
 public class OpenAccountCommand {
+    @TargetAggregateIdentifier
     private String id;
     private String name;
 

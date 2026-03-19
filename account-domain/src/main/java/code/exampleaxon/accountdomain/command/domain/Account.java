@@ -6,7 +6,6 @@ import code.exampleaxon.accountdomain.exception.AccountOperationNotPossibleExcep
 import code.exampleaxon.accountdomain.exception.InsufficientBalanceException;
 import code.exampleaxon.accountdomain.exception.InvalidAmountException;
 import org.axonframework.modelling.command.AggregateIdentifier;
-import org.axonframework.modelling.command.AggregateRoot;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 
 import org.axonframework.spring.stereotype.Aggregate;
@@ -14,7 +13,6 @@ import org.axonframework.spring.stereotype.Aggregate;
 import static code.exampleaxon.accountdomain.command.domain.AccountStatus.*;
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
-@AggregateRoot
 @Aggregate
 public class Account {
 
@@ -37,7 +35,7 @@ public class Account {
     }
 
     public void close() {
-        validateAccountStateChange(this.id, this.status, CLOSE);
+        validateAccountStateChange(this.id, this.status, CLOSED);
         validateEligibilityForClosure();
         apply(new AccountClosedEvent(this.id));
     }
@@ -53,7 +51,7 @@ public class Account {
     }
 
     @EventSourcingHandler
-    public void on(AccountOpenedEvent event) {
+    private void on(AccountOpenedEvent event) {
         this.id = event.getId();
         this.name = event.getName();
         this.balance = 0;
@@ -61,22 +59,22 @@ public class Account {
     }
 
     @EventSourcingHandler
-    public void on(AccountActivatedEvent event) {
+    private void on(AccountActivatedEvent event) {
         this.status = ACTIVE;
     }
 
     @EventSourcingHandler
-    public void on(AccountClosedEvent event) {
-        this.status = CLOSE;
+    private void on(AccountClosedEvent event) {
+        this.status = CLOSED;
     }
 
     @EventSourcingHandler
-    public void on(AmountCreditedEvent event) {
+    private void on(AmountCreditedEvent event) {
         this.balance += event.getAmount();
     }
 
     @EventSourcingHandler
-    public void on(AmountDebitedEvent event) {
+    private void on(AmountDebitedEvent event) {
         this.balance -= event.getAmount();
     }
 
@@ -93,7 +91,7 @@ public class Account {
     }
 
     private void validateAmount(int amount) {
-        if (amount < 0) {
+        if (amount <= 0) {
             throw new InvalidAmountException(id, amount);
         }
     }

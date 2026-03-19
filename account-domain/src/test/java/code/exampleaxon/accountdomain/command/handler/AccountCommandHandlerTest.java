@@ -111,6 +111,14 @@ public class AccountCommandHandlerTest {
     }
 
     @Test
+    public void expectExceptionForCreditOperationForZeroAmount() {
+        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID, TEST_NAME),
+                new AccountActivatedEvent(TEST_ID))
+                .when(new CreditAmountCommand(TEST_ID, 0))
+                .expectException(InvalidAmountException.class);
+    }
+
+    @Test
     public void expectDebitOperation() {
         fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID, TEST_NAME),
                 new AccountActivatedEvent(TEST_ID),
@@ -139,6 +147,13 @@ public class AccountCommandHandlerTest {
     public void expectExceptionForDebitOperationForInvalidAmount() {
         fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID, TEST_NAME), new AccountActivatedEvent(TEST_ID))
                 .when(new DebitAmountCommand(TEST_ID, -100))
+                .expectException(InvalidAmountException.class);
+    }
+
+    @Test
+    public void expectExceptionForDebitOperationForZeroAmount() {
+        fixtureConfiguration.given(new AccountOpenedEvent(TEST_ID, TEST_NAME), new AccountActivatedEvent(TEST_ID))
+                .when(new DebitAmountCommand(TEST_ID, 0))
                 .expectException(InvalidAmountException.class);
     }
 

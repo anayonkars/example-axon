@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import static code.exampleaxon.accountdomain.command.domain.AccountStatus.OPEN;
 
+
 @Component
 public class AccountOpenedEventListener {
     private final AccountViewRepository accountViewRepository;
