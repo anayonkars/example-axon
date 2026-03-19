@@ -28,7 +28,7 @@ spring:
 
 liquibase:
   change-log:
-    classpath:account_changeset.yml
+    classpath:account_changeset.xml
 
 axon:
   axonserver:

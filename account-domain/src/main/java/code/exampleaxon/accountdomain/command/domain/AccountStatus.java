@@ -8,9 +8,9 @@ import java.util.List;
 public enum AccountStatus {
     OPEN,
     ACTIVE,
-    CLOSE;
+    CLOSED;
 
-    private static final List<AccountStatus> LIFE_CYCLE = Arrays.asList(OPEN, ACTIVE, CLOSE);
+    private static final List<AccountStatus> LIFE_CYCLE = Arrays.asList(OPEN, ACTIVE, CLOSED);
 
     private static boolean isValidChange(AccountStatus currentStatus, AccountStatus nextStatus) {
         return currentStatus != null &&
